@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "Coin Toss",
+    "slug": "coin-toss-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "description": "Make quick decisions with a simple, elegant coin toss app. Flip a virtual coin with smooth animations and realistic physics.",
+    "newArchEnabled": true,
+    "experiments": {
+      "reactCompiler": true
+    },
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0e27"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cointoss.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0e27"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.cointoss.app",
+      "versionCode": 1,
+      "permissions": ["VIBRATE"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
+  }
+}
