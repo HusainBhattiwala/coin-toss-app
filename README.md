@@ -19,10 +19,9 @@ A simple, elegant coin toss app built with React Native and Expo. Make quick dec
 
 ## 📱 Screenshots
 
-<!-- Add your screenshots here -->
-```
-[Lobby Screen]  [Coin Flipping]  [Result]
-```
+| Lobby Screen | Toss Screen |
+|:------------:|:-----------:|
+| ![Lobby](assets/lobby.jpeg) | ![Toss](assets/toss_screen.jpeg) |
 
 ## 🚀 Tech Stack
 
