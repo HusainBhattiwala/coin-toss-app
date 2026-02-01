@@ -1,22 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Coin from '../components/Coin';
 import FlipButton from '../components/FlipButton';
 import ResultDisplay from '../components/ResultDisplay';
+import { COLORS, SPACING, TYPOGRAPHY } from '../constants/theme';
 import { useCoinFlip } from '../hooks/useCoinFlip';
-import { COLORS, TYPOGRAPHY, SPACING } from '../constants/theme';
 
 interface GameScreenProps {
   onBack: () => void;
 }
 
 export default function GameScreen({ onBack }: GameScreenProps) {
-  const { animatedStyle, flip, isFlipping, currentSide } = useCoinFlip();
+  const { animatedStyle, flip, isFlipping, currentSide, rotationX } = useCoinFlip();
 
   return (
-    <LinearGradient colors={[COLORS.gradient.start, COLORS.gradient.middle, COLORS.gradient.end]} style={styles.container}>
+    <LinearGradient
+      colors={[COLORS.gradient.start, COLORS.gradient.middle, COLORS.gradient.end]}
+      style={styles.container}
+    >
       <SafeAreaView style={styles.safeArea}>
         <StatusBar style="light" />
 
@@ -28,7 +31,7 @@ export default function GameScreen({ onBack }: GameScreenProps) {
         <Text style={styles.title}>COIN TOSS</Text>
 
         <View style={styles.coinContainer}>
-          <Coin animatedStyle={animatedStyle} currentSide={currentSide} />
+          <Coin animatedStyle={animatedStyle} rotationX={rotationX} />
         </View>
 
         <View style={styles.resultContainer}>

@@ -1,9 +1,9 @@
-import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { COLORS, TYPOGRAPHY, SPACING } from '../constants/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SPACING, TYPOGRAPHY } from '../constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -27,7 +27,10 @@ export default function LobbyScreen({ onStart }: LobbyScreenProps) {
   };
 
   return (
-    <LinearGradient colors={[COLORS.gradient.start, COLORS.gradient.middle, COLORS.gradient.end]} style={styles.container}>
+    <LinearGradient
+      colors={[COLORS.gradient.start, COLORS.gradient.middle, COLORS.gradient.end]}
+      style={styles.container}
+    >
       <SafeAreaView style={styles.safeArea}>
         <StatusBar style="light" />
 

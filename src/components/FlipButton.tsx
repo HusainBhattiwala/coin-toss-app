@@ -1,6 +1,6 @@
-import { StyleSheet, Text, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { COLORS, TYPOGRAPHY } from '../constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);

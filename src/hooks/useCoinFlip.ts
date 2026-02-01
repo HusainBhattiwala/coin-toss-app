@@ -1,12 +1,12 @@
-import { useState, useCallback } from 'react';
-import { useSharedValue, useAnimatedStyle, withTiming, withSequence } from 'react-native-reanimated';
+import { ImpactFeedbackStyle, impactAsync, NotificationFeedbackType, notificationAsync } from 'expo-haptics';
+import { useCallback, useState } from 'react';
+import { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { impactAsync, ImpactFeedbackStyle, notificationAsync, NotificationFeedbackType } from 'expo-haptics';
 import { ANIMATION_CONFIG } from '../constants/animation';
 import type { CoinSide, FlipResult } from '../types/coin';
 
 // Track recent results to avoid unrealistic streaks
-let recentResults: boolean[] = [];
+const recentResults: boolean[] = [];
 
 // Intelligent random that avoids long streaks (more realistic)
 const getSmartRandomResult = (): boolean => {
@@ -17,7 +17,7 @@ const getSmartRandomResult = (): boolean => {
   const recentCount = Math.min(recentResults.length, 3); // Look at last 3 flips
   if (recentCount >= 2) {
     const lastResult = recentResults[recentResults.length - 1];
-    const allSame = recentResults.slice(-recentCount).every(r => r === lastResult);
+    const allSame = recentResults.slice(-recentCount).every((r) => r === lastResult);
 
     if (allSame) {
       // After 2-3 same results, increase chance of opposite
@@ -45,7 +45,7 @@ const getSmartRandomResult = (): boolean => {
   return result;
 };
 
-const calculateFlip = (currentRotation: number): FlipResult => {
+const calculateFlip = (): FlipResult => {
   // Use smart randomness that avoids unrealistic streaks
   const willBeHeads = getSmartRandomResult();
 
@@ -53,10 +53,11 @@ const calculateFlip = (currentRotation: number): FlipResult => {
   const rotationVariance = Math.floor(Math.random() * 5) - 2; // -2 to +2
   const fullRotations = 50 + rotationVariance;
 
-  // Calculate total rotation from current position
-  // Add full rotations, then add final position (0 for heads, 180 for tails)
+  // Calculate total rotation to land cleanly on the target
+  // For heads: land on 360n (0°)
+  // For tails: land on 360n + 180 (180°)
   const targetAngle = willBeHeads ? 0 : 180;
-  const finalRotation = currentRotation + (fullRotations * 360) + targetAngle;
+  const finalRotation = fullRotations * 360 + targetAngle;
 
   return { finalRotation, result: willBeHeads ? 'heads' : 'tails' };
 };
@@ -69,11 +70,8 @@ export const useCoinFlip = () => {
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      transform: [
-        { rotateX: `${rotationX.value}deg` },
-        { scale: scaleValue.value },
-      ] as any,
+      transform: `rotateX(${rotationX.value}deg) scale(${scaleValue.value})`,
+      perspective: ANIMATION_CONFIG.perspective,
     };
   });
 
@@ -88,8 +86,8 @@ export const useCoinFlip = () => {
   }, []);
 
   const flip = useCallback(async () => {
-    // Calculate flip from current rotation position
-    const { finalRotation, result } = calculateFlip(rotationX.value);
+    // Calculate flip result
+    const { finalRotation, result } = calculateFlip();
     setIsFlipping(true);
 
     // Haptic feedback at start of flip
@@ -99,6 +97,8 @@ export const useCoinFlip = () => {
       // Silently fail on unsupported devices
     }
 
+    // Reset rotation to 0 before starting new flip
+    rotationX.value = 0;
     scaleValue.value = 1;
 
     // Slight scale animation for depth perception
@@ -108,6 +108,7 @@ export const useCoinFlip = () => {
     );
 
     // Main X-axis rotation with consistent timing
+    // Animation will land exactly on 0° (heads) or 180° (tails)
     rotationX.value = withTiming(
       finalRotation,
       {
@@ -116,13 +117,11 @@ export const useCoinFlip = () => {
       (finished) => {
         'worklet';
         if (finished) {
-          // Normalize to final position (0 for heads, 180 for tails)
-          rotationX.value = result === 'heads' ? 0 : 180;
           scheduleOnRN(onFlipComplete, result);
         }
       }
     );
   }, [rotationX, scaleValue, onFlipComplete]);
 
-  return { animatedStyle, flip, isFlipping, currentSide };
+  return { animatedStyle, flip, isFlipping, currentSide, rotationX };
 };
