@@ -1,5 +1,6 @@
 import { ImpactFeedbackStyle, impactAsync, NotificationFeedbackType, notificationAsync } from 'expo-haptics';
 import { useCallback, useState } from 'react';
+import type { ViewStyle } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { ANIMATION_CONFIG } from '../constants/animation';
@@ -68,11 +69,15 @@ export const useCoinFlip = () => {
   const [currentSide, setCurrentSide] = useState<CoinSide>('heads');
   const [isFlipping, setIsFlipping] = useState(false);
 
-  const animatedStyle = useAnimatedStyle(() => {
+  const animatedStyle = useAnimatedStyle<ViewStyle>(() => {
+    'worklet';
     return {
-      transform: `rotateX(${rotationX.value}deg) scale(${scaleValue.value})`,
-      perspective: ANIMATION_CONFIG.perspective,
-    };
+      transform: [
+        { perspective: ANIMATION_CONFIG.perspective },
+        { rotateX: `${rotationX.value}deg` },
+        { scale: scaleValue.value },
+      ],
+    } as ViewStyle;
   });
 
   const onFlipComplete = useCallback((result: CoinSide) => {

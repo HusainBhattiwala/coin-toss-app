@@ -38,7 +38,7 @@ export default function LobbyScreen({ onStart }: LobbyScreenProps) {
         {/* Logo */}
         <View style={styles.logoContainer}>
           <Image
-            source={require('../../assets/coin_toss_app.png')}
+            source={require('../../assets/coin_toss_app_lobby.png')}
             style={styles.logo}
             contentFit="contain"
             cachePolicy="memory-disk"
@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.xl,
   },
   logo: {
-    width: '90%',
+    width: '95%',
     height: '100%',
-    maxWidth: 400,
-    maxHeight: 400,
+    maxWidth: 500,
+    maxHeight: 500,
   },
   buttonContainer: {
     paddingBottom: SPACING.xl,
