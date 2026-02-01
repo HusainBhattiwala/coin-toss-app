@@ -1,9 +1,10 @@
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING, TYPOGRAPHY } from '../constants/theme';
+import { COLORS, SPACING } from '../constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -34,22 +35,19 @@ export default function LobbyScreen({ onStart }: LobbyScreenProps) {
       <SafeAreaView style={styles.safeArea}>
         <StatusBar style="light" />
 
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>COIN TOSS</Text>
-        </View>
-
-        {/* Coin Icon */}
-        <View style={styles.coinSection}>
-          <View style={styles.coinDisplay}>
-            <View style={styles.coinFace}>
-              <Text style={styles.coinText}>₹</Text>
-            </View>
-          </View>
+        {/* Logo */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../assets/coin_toss_app.png')}
+            style={styles.logo}
+            contentFit="contain"
+            cachePolicy="memory-disk"
+            priority="high"
+          />
         </View>
 
         {/* Start Button */}
-        <View style={styles.buttonSection}>
+        <View style={styles.buttonContainer}>
           <AnimatedPressable
             style={[styles.startButtonContainer, buttonAnimatedStyle]}
             onPress={onStart}
@@ -77,58 +75,24 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    justifyContent: 'space-between',
     paddingHorizontal: SPACING.md,
   },
-  header: {
-    flex: 1.5,
+  logoContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: SPACING.xl,
+    paddingVertical: SPACING.xl,
   },
-  title: {
-    ...TYPOGRAPHY.heading,
-    color: COLORS.text.primary,
-    textShadowColor: 'rgba(255, 215, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 10,
-  },
-  coinSection: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  coinDisplay: {
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: COLORS.button.gradientStart,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 10,
-  },
-  coinFace: {
-    width: '100%',
+  logo: {
+    width: '90%',
     height: '100%',
-    borderRadius: 90,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: COLORS.button.gradientEnd,
+    maxWidth: 400,
+    maxHeight: 400,
   },
-  coinText: {
-    fontSize: 70,
-    fontWeight: '900',
-    color: COLORS.background.primary,
-  },
-  buttonSection: {
-    flex: 1.5,
-    justifyContent: 'center',
-    alignItems: 'center',
+  buttonContainer: {
     paddingBottom: SPACING.xl,
+    alignItems: 'center',
   },
   startButtonContainer: {
     width: '70%',
